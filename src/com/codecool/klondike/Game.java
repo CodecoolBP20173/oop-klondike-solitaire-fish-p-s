@@ -77,11 +77,13 @@ public class Game extends Pane {
         if (draggedCards == null || draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
+        Pile pileTableau = getValidIntersectingPile(card, tableauPiles);
+        Pile pileFoundation = getValidIntersectingPile(card, foundationPiles);
 
-        if (pile != null) {
-            handleValidMove(card, pile);
+        if (pileTableau != null) {
+            handleValidMove(card, pileTableau);
+        } else if (pileFoundation != null) {
+            handleValidMove(card, pileFoundation);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -112,11 +114,11 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
+
         int sourceSuit = card.getSuit();
         int sourceVal = card.getRank();
         Card destination = destPile.getTopCard();
-        //if no card is on the pile
+        //if destination pile is empty
         if (destination == null){
             switch (destPile.getPileType())
             {
@@ -124,30 +126,33 @@ public class Game extends Pane {
                     if (sourceVal == 1){
                         return true;
                     }
-                    else {
-                        return false;
-                    }
+                    break;
                 case TABLEAU:
                     if (sourceVal == 13){
                         return true;
                     }
-                    else {
-                        return false;
-                    }
-                default:
-                    return false;
+                    break;
             }
+            return false;
         }
 
         //if the pile is not empty
         int destinationVal = destination.getRank();
         int destinationSuit = destination.getSuit();
-        // destination card should be one higher value
-        if ((sourceVal + 1) == destinationVal)
-        {
-            // destination card should be the opposite color
-            switch (sourceSuit)
-            {
+
+        //destination is foundation
+        if (destPile.getPileType() == Pile.PileType.FOUNDATION){
+            if ((sourceVal - 1) == destinationVal){
+                if(sourceSuit == destinationSuit);{
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        //destination is tableau
+        if ((sourceVal + 1) == destinationVal) {
+            switch (sourceSuit) {
                 case 1:
                     if (destinationSuit == 3 || destinationSuit == 4)
                         return true;
@@ -165,7 +170,8 @@ public class Game extends Pane {
                         return true;
                     break;
             }
-        }return false;
+        }
+        return false;
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
