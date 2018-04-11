@@ -74,16 +74,17 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
-        if (draggedCards.isEmpty())
+        if (draggedCards == null || draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
         //TODO
+
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            draggedCards.clear();
         }
     };
 
@@ -115,40 +116,56 @@ public class Game extends Pane {
         int sourceSuit = card.getSuit();
         int sourceVal = card.getRank();
         Card destination = destPile.getTopCard();
-        int destinationVal = destination.getSuit();
-        int destinationSuit = destination.getRank();
+        //if no card is on the pile
+        if (destination == null){
+            switch (destPile.getPileType())
+            {
+                case FOUNDATION:
+                    if (sourceVal == 1){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                case TABLEAU:
+                    if (sourceVal == 13){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
 
+        //if the pile is not empty
+        int destinationVal = destination.getRank();
+        int destinationSuit = destination.getSuit();
         // destination card should be one higher value
-        if ((sourceVal - 1) == destinationVal || destinationVal != 0 || sourceVal == 13)
+        if ((sourceVal + 1) == destinationVal)
         {
-            // destination card should be opposite color
+            // destination card should be the opposite color
             switch (sourceSuit)
             {
-                case 3:
-                    if (destinationSuit != 1 && destinationSuit != 2)
-                        return false;
-                    else
-                        return true;
-                case 4:
-                    if (destinationSuit != 1 && destinationSuit != 2)
-                        return false;
-                    else
-                        return true;
                 case 1:
-                    if (destinationSuit != 3 && destinationSuit != 4)
-                        return false;
-                    else
+                    if (destinationSuit == 3 || destinationSuit == 4)
                         return true;
+                    break;
                 case 2:
-                    if (destinationSuit != 3 && destinationSuit != 4)
-                        return false;
-                    else
+                    if (destinationSuit == 3 || destinationSuit == 4)
                         return true;
+                    break;
+                case 3:
+                    if (destinationSuit == 1 || destinationSuit == 2)
+                        return true;
+                    break;
+                case 4:
+                    if (destinationSuit == 1 || destinationSuit == 2)
+                        return true;
+                    break;
             }
-            return false; // this is never reached
-        } else
-            return false;
-
+        }return false;
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
