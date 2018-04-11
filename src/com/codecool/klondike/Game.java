@@ -14,12 +14,14 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 public class Game extends Pane {
 
-    private List<Card> deck = new ArrayList<>();
+    private List<Card> deck;
 
     private Pile stockPile;
     private Pile discardPile;
@@ -95,6 +97,7 @@ public class Game extends Pane {
 
     public Game() {
         deck = Card.createNewDeck();
+        Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -237,6 +240,23 @@ public class Game extends Pane {
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
         //TODO
+
+        int cardsToBePlaced = 1;
+        for ( Pile tableauPile : tableauPiles) {
+            for ( int i = 0; i < cardsToBePlaced; i++) {
+                Card currentCard = deckIterator.next();
+                tableauPile.addCard(currentCard);
+                addMouseEventHandlers(currentCard);
+                getChildren().add(currentCard);
+            }
+            Card lastCardOnPile = tableauPile.getTopCard();
+            lastCardOnPile.flip();
+            cardsToBePlaced ++;
+        }
+
+
+
+
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
