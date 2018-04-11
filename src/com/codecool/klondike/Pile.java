@@ -1,6 +1,7 @@
 package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Background;
@@ -21,6 +22,8 @@ public class Pile extends Pane {
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
         this.cardGap = cardGap;
+
+
     }
 
     public PileType getPileType() {
@@ -81,6 +84,14 @@ public class Pile extends Pane {
         GaussianBlur gaussianBlur = new GaussianBlur(10);
         setBackground(background);
         setEffect(gaussianBlur);
+    }
+
+    public void attachFlipHandler() {
+        cards.addListener((ListChangeListener<Card>) c -> {
+            if(!isEmpty() && getTopCard().isFaceDown()){
+                getTopCard().flip();
+            }
+        });
     }
 
     public enum PileType {

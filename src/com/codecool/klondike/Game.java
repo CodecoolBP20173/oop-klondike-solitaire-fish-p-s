@@ -94,6 +94,7 @@ public class Game extends Pane {
         }
     };
 
+
     public boolean isGameWon() {
         //TODO
         return false;
@@ -148,7 +149,7 @@ public class Game extends Pane {
         //destination is foundation
         if (destPile.getPileType() == Pile.PileType.FOUNDATION){
             if ((sourceVal - 1) == destinationVal){
-                if(sourceSuit == destinationSuit);{
+                if(sourceSuit == destinationSuit){
                     return true;
                 }
             }
@@ -260,10 +261,8 @@ public class Game extends Pane {
             Card lastCardOnPile = tableauPile.getTopCard();
             lastCardOnPile.flip();
             cardsToBePlaced ++;
+            tableauPile.attachFlipHandler();
         }
-
-
-
 
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
