@@ -202,9 +202,6 @@ public class Game extends Pane {
             cardsToBePlaced ++;
         }
 
-
-
-
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
@@ -231,23 +228,48 @@ public class Game extends Pane {
             }
         });
         getChildren().add(restartBtn);
+
+        Button newGameBtn = new Button("New Game");
+        newGameBtn.setLayoutY(80);
+        newGameBtn.setLayoutX(10);
+        newGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                newGame();
+            }
+        });
+        getChildren().add(newGameBtn);
     }
     public void restartGame(List deck) {
         List<Card> tempDeck = new ArrayList<>();
         tempDeck = deck;
-
-        for (Pile pile: tableauPiles) {
-            pile.clear();
-        }
-        for (Pile pile: foundationPiles) {
-            pile.clear();
-        }
+        getChildren().clear();
+        tableauPiles.clear();
+        foundationPiles.clear();
         stockPile.clear();
         discardPile.clear();
-        getChildren().clear();
         deck = tempDeck;
+        resetCardDirection(deck);
         initPiles();
         dealCards();
+        initButtons(deck);
+    }
+    public void resetCardDirection(List deck) {
+        for (int i=0; i < 0; i++) {
+            deck[i]        }
+    }
+
+    public void newGame() {
+        getChildren().clear();
+        tableauPiles.clear();
+        foundationPiles.clear();
+        stockPile.clear();
+        discardPile.clear();
+        deck = Card.createNewDeck();
+        Collections.shuffle(deck);
+        initPiles();
+        dealCards();
+        initButtons(deck);
     }
 
 
