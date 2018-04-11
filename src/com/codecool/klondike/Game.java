@@ -97,7 +97,7 @@ public class Game extends Pane {
         deck = Card.createNewDeck();
         initPiles();
         dealCards();
-        initButtons();
+        initButtons(deck);
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -199,17 +199,35 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
-    public void initButtons() {
+    public void initButtons(List deck) {
         Button restartBtn = new Button("Restart");
         restartBtn.setLayoutY(25);
         restartBtn.setLayoutX(10);
         restartBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //restart method
+                System.out.println("event handler");
+                restartGame(deck);
             }
         });
         getChildren().add(restartBtn);
+    }
+    public void restartGame(List deck) {
+        List<Card> tempDeck = new ArrayList<>();
+        tempDeck = deck;
+
+        for (Pile pile: tableauPiles) {
+            pile.clear();
+        }
+        for (Pile pile: foundationPiles) {
+            pile.clear();
+        }
+        stockPile.clear();
+        discardPile.clear();
+        getChildren().clear();
+        deck = tempDeck;
+        initPiles();
+        dealCards();
     }
 
 
