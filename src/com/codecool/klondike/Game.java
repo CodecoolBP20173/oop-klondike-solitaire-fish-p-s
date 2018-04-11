@@ -112,8 +112,45 @@ public class Game extends Pane {
 
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
-        return true;
+        int sourceSuit = card.getSuit();
+        int sourceVal = card.getRank();
+        Card destination = destPile.getTopCard();
+        int destinationVal = destination.getSuit();
+        int destinationSuit = destination.getRank();
+
+        // destination card should be one higher value
+        if ((sourceVal - 1) == destinationVal || destinationVal != 0 || sourceVal == 13)
+        {
+            // destination card should be opposite color
+            switch (sourceSuit)
+            {
+                case 3:
+                    if (destinationSuit != 1 && destinationSuit != 2)
+                        return false;
+                    else
+                        return true;
+                case 4:
+                    if (destinationSuit != 1 && destinationSuit != 2)
+                        return false;
+                    else
+                        return true;
+                case 1:
+                    if (destinationSuit != 3 && destinationSuit != 4)
+                        return false;
+                    else
+                        return true;
+                case 2:
+                    if (destinationSuit != 3 && destinationSuit != 4)
+                        return false;
+                    else
+                        return true;
+            }
+            return false; // this is never reached
+        } else
+            return false;
+
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
