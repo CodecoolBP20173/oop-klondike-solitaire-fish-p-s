@@ -96,9 +96,14 @@ public class Game extends Pane {
 
 
     public boolean isGameWon() {
-        //TODO
-        return false;
+        for (Pile pile : foundationPiles) {
+            if (pile.getCards().size() != 13) {
+                return false;
+            }
+        }
+        return true;
     }
+
 
     public Game() {
         deck = Card.createNewDeck();
@@ -235,7 +240,13 @@ public class Game extends Pane {
             foundationPile.setLayoutY(20);
             foundationPiles.add(foundationPile);
             getChildren().add(foundationPile);
+            foundationPile.getCards().addListener((ListChangeListener<Card>) c -> {
+                if (isGameWon()) {
+                    System.out.println("YOU WONNED");
+                }
+            });
         }
+
         for (int i = 0; i < 7; i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
             tableauPile.setBlurredBackground();
