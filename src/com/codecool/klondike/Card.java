@@ -38,6 +38,10 @@ public class Card extends ImageView {
         return suit;
     }
 
+    public void setFaceDown() {
+        this.faceDown = true;
+    }
+
     public int getRank() {
         return rank;
     }

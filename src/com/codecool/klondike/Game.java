@@ -23,6 +23,7 @@ import java.util.Collections;
 public class Game extends Pane {
 
     private List<Card> deck;
+    private List<Card> tempdeck;
 
     private Pile stockPile;
     private Pile discardPile;
@@ -97,10 +98,11 @@ public class Game extends Pane {
 
     public Game() {
         deck = Card.createNewDeck();
+        tempdeck = new ArrayList(deck);
         Collections.shuffle(deck);
         initPiles();
         dealCards();
-        initButtons(deck);
+        initButtons();
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -198,11 +200,16 @@ public class Game extends Pane {
                 getChildren().add(currentCard);
             }
             Card lastCardOnPile = tableauPile.getTopCard();
-            lastCardOnPile.flip();
+            if (lastCardOnPile.isFaceDown()){
+                lastCardOnPile.flip();
+            }
             cardsToBePlaced ++;
         }
 
         deckIterator.forEachRemaining(card -> {
+            if(!card.isFaceDown()){
+                card.flip();
+            }
             stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
@@ -216,22 +223,22 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
-    public void initButtons(List deck) {
+    public void initButtons() {
         Button restartBtn = new Button("Restart");
         restartBtn.setLayoutY(25);
-        restartBtn.setLayoutX(10);
+        restartBtn.setLayoutX(480);
         restartBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("event handler");
-                restartGame(deck);
+                restartGame();
             }
         });
         getChildren().add(restartBtn);
 
         Button newGameBtn = new Button("New Game");
         newGameBtn.setLayoutY(80);
-        newGameBtn.setLayoutX(10);
+        newGameBtn.setLayoutX(480);
         newGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -240,36 +247,28 @@ public class Game extends Pane {
         });
         getChildren().add(newGameBtn);
     }
-    public void restartGame(List deck) {
-        List<Card> tempDeck = new ArrayList<>();
-        tempDeck = deck;
-        getChildren().clear();
-        tableauPiles.clear();
-        foundationPiles.clear();
-        stockPile.clear();
-        discardPile.clear();
-        deck = tempDeck;
-        resetCardDirection(deck);
+    public void restartGame() {
+        clearAllPiles();
         initPiles();
         dealCards();
-        initButtons(deck);
-    }
-    public void resetCardDirection(List deck) {
-        for (int i=0; i < 0; i++) {
-            deck[i]        }
+        initButtons();
     }
 
     public void newGame() {
-        getChildren().clear();
-        tableauPiles.clear();
-        foundationPiles.clear();
-        stockPile.clear();
-        discardPile.clear();
+        clearAllPiles();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();
         dealCards();
-        initButtons(deck);
+        initButtons();
+    }
+
+    public void clearAllPiles() {
+        getChildren().clear();
+        tableauPiles.clear();
+        foundationPiles.clear();
+        stockPile.clear();
+        discardPile.clear();
     }
 
 
