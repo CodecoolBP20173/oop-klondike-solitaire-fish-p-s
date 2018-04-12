@@ -60,6 +60,13 @@ public class Pile extends Pane {
         layoutCard(card);
     }
 
+    public void addCards(List<Card> cards) {
+        for(Card card: cards) {
+            card.flip();
+            addCard(card);
+        }
+    }
+
     private void layoutCard(Card card) {
         card.relocate(card.getLayoutX() + card.getTranslateX(), card.getLayoutY() + card.getTranslateY());
         card.setTranslateX(0);
