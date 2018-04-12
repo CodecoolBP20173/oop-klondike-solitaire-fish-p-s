@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 
 public class Game extends Pane {
 
@@ -257,6 +258,7 @@ public class Game extends Pane {
             foundationPile.getCards().addListener((ListChangeListener<Card>) c -> {
                 if (isGameWon()) {
                     System.out.println("YOU WONNED");
+                    JOptionPane.showMessageDialog(null, "YOU WONNED");
                 }
             });
         }
