@@ -120,7 +120,11 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        List<Card> discardPileCards =discardPile.getCards();
+        stockPile.clear();
+        stockPile.addCards(discardPileCards);
+        discardPile.clear();
+
         System.out.println("Stock refilled from discard pile.");
     }
 
@@ -259,7 +263,6 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
 
         int cardsToBePlaced = 1;
         for ( Pile tableauPile : tableauPiles) {
