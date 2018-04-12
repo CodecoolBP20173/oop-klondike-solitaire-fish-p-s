@@ -67,15 +67,20 @@ public class Game extends Pane {
             double offsetY = e.getSceneY() - dragStartY;
 
             draggedCards.clear();
-            draggedCards.add(card);
+            List<Card> cards = activePile.getCards();
+            int cardIndex = cards.indexOf(card);
+            for (int i = cardIndex; i < cards.size(); i++ ) {
+                Card item = cards.get(i);
+                draggedCards.add(item);
+                item.getDropShadow().setRadius(20);
+                item.getDropShadow().setOffsetX(10);
+                item.getDropShadow().setOffsetY(10);
 
-            card.getDropShadow().setRadius(20);
-            card.getDropShadow().setOffsetX(10);
-            card.getDropShadow().setOffsetY(10);
+                item.toFront();
+                item.setTranslateX(offsetX);
+                item.setTranslateY(offsetY);
 
-            card.toFront();
-            card.setTranslateX(offsetX);
-            card.setTranslateY(offsetY);
+            }
         }
     };
 
@@ -124,7 +129,12 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        List<Card> discardPileCards =discardPile.getCards();
+        Collections.reverse(discardPileCards);
+        stockPile.clear();
+        stockPile.addCards(discardPileCards);
+        discardPile.clear();
+
         System.out.println("Stock refilled from discard pile.");
     }
 
@@ -263,7 +273,6 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
 
         int cardsToBePlaced = 1;
         for ( Pile tableauPile : tableauPiles) {
