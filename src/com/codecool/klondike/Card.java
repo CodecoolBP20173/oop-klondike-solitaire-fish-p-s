@@ -38,6 +38,10 @@ public class Card extends ImageView {
         return suit;
     }
 
+    public void setFaceDown() {
+        this.faceDown = true;
+    }
+
     public int getRank() {
         return rank;
     }
@@ -78,8 +82,14 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
-        return true;
+        return cardColor(card1).equals(cardColor(card2));
+    }
+
+    public static String cardColor (Card card){
+        if(card.getSuit() == 1 || card.getSuit() == 2){
+            return "red";
+        } else {
+            return"black";}
     }
 
     public static boolean isSameSuit(Card card1, Card card2) {
@@ -97,7 +107,7 @@ public class Card extends ImageView {
     }
 
     public static void loadCardImages() {
-        cardBackImage = new Image("card_images/card_back.png");
+        cardBackImage = new Image("card_images/FishCardBack.png");
         String suitName = "";
         for (int suit = 1; suit < 5; suit++) {
             switch (suit) {
