@@ -67,15 +67,20 @@ public class Game extends Pane {
             double offsetY = e.getSceneY() - dragStartY;
 
             draggedCards.clear();
-            draggedCards.add(card);
+            List<Card> cards = activePile.getCards();
+            int cardIndex = cards.indexOf(card);
+            for (int i = cardIndex; i < cards.size(); i++ ) {
+                Card item = cards.get(i);
+                draggedCards.add(item);
+                item.getDropShadow().setRadius(20);
+                item.getDropShadow().setOffsetX(10);
+                item.getDropShadow().setOffsetY(10);
 
-            card.getDropShadow().setRadius(20);
-            card.getDropShadow().setOffsetX(10);
-            card.getDropShadow().setOffsetY(10);
+                item.toFront();
+                item.setTranslateX(offsetX);
+                item.setTranslateY(offsetY);
 
-            card.toFront();
-            card.setTranslateX(offsetX);
-            card.setTranslateY(offsetY);
+            }
         }
     };
 
