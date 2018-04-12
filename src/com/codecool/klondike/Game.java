@@ -269,6 +269,9 @@ public class Game extends Pane {
         for ( Pile tableauPile : tableauPiles) {
             for ( int i = 0; i < cardsToBePlaced; i++) {
                 Card currentCard = deckIterator.next();
+                if (!currentCard.isFaceDown()){
+                    currentCard.flip();
+                }
                 tableauPile.addCard(currentCard);
                 addMouseEventHandlers(currentCard);
                 getChildren().add(currentCard);
